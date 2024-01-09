@@ -1,4 +1,4 @@
-website_name,Discount Percentage average
-backmarket,50
-franprix,50
-fnac,25
+website_name,Discount Percentage average,website
+backmarket,50,https://www.backmarket.fr/fr-fr/student-discount
+franprix,50,https://www.franprix.fr/courses/promotions
+fnac,25,https://www.fnac.com/Bons-plans-Maison-et-cuisine/shi355581/w-4#bl=Mmpem
