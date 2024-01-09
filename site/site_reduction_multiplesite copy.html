@@ -35,8 +35,7 @@
         let container = document.getElementById('discounts-container');
         
         lines.forEach(line => {
-          // let [websiteName, discountValue] = line.split(','); // Split each line into website name and discount value
-          let [websiteName, discountValue,website] = line.split(','); // Split each line into website name and discount value
+          let [websiteName, discountValue] = line.split(','); // Split each line into website name and discount value
 
           if (websiteName && discountValue) {
             let card = document.createElement('div');
@@ -45,7 +44,7 @@
               <img src="path-to-image.jpg" alt="${websiteName}">
               <h3>${discountValue}% off on ${websiteName}</h3>
               <p>Enjoy online savings with your discount at ${websiteName}</p>
-              <a href="${website}" class="btn">Take advantage</a>
+              <a href="http://example.com/${websiteName}" class="btn">Take advantage</a>
             `;
             container.appendChild(card);
           }
