@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discounts and Wellness</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+    }
+    header {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .search-and-slider {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px;
+      background: white;
+    }
+    .search-bar {
+      width: 40%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 20px;
+    }
+    .card {
+      width: 300px;
+      margin: 10px;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 1px solid #ddd;
+    }
+    .card h3 {
+      color: #333;
+      padding: 10px;
+    }
+    .card p {
+      color: #666;
+      padding: 0 10px 10px;
+    }
+    .btn {
+      display: block;
+      text-align: center;
+      color: white;
+      background-color: #28a745;
+      padding: 10px;
+      text-decoration: none;
+      border-radius: 4px;
+      margin: 10px;
+    }
+    .btn:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Discounts and Wellness</h1>
+</header>
+
+
+<div class="slider-container">
+    <label for="discount-slider">Discount Threshold: <span id="slider-value">0%</span></label>
+    <input type="range" id="discount-slider" min="0" max="100" value="0" oninput="updateSliderValue()">
+  </div>
+
+
+<div class="search-and-slider">
+  <input type="text" id="search-bar" class="search-bar" placeholder="Search for brands..." onkeyup="filterDiscounts()">
+  <div class="slider-container">
+    <label for="discount-slider">Discount Threshold:</label>
+    <input type="range" id="discount-slider" min="0" max="100" value="0" oninput="filterDiscounts()">
+  </div>
+</div>
+
+<div class="container" id="discounts-container">
+  <!-- Cards will be added here by JavaScript -->
+</div>
+
+<script>
+    let allDiscounts = [];
+  
+    function populateDiscounts() {
+      fetch('https://raw.githubusercontent.com/foulde/webscrapping_students/main/average.csv')
+        .then(response => response.text())
+        .then(text => {
+          let lines = text.split('\n').slice(1);
+          allDiscounts = lines.map(line => {
+            let [websiteName, discountValue, website] = line.split(',');
+            return { websiteName, discountValue, website };
+          });
+          renderDiscounts();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+  
+    function renderDiscounts() {
+      let container = document.getElementById('discounts-container');
+      container.innerHTML = ''; // Clear existing cards
+      let searchQuery = document.getElementById('search-bar').value.toLowerCase();
+      let discountThreshold = parseInt(document.getElementById('discount-slider').value);
+  
+      allDiscounts.forEach(discount => {
+        if (discount.websiteName.toLowerCase().includes(searchQuery) && parseInt(discount.discountValue) >= discountThreshold) {
+          let card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="path-to-image.jpg" alt="${discount.websiteName}">
+            <h3>${discount.discountValue}% off on ${discount.websiteName}</h3>
+            <p>Enjoy online savings with your discount at ${discount.websiteName}</p>
+            <a href="${discount.website}" class="btn">Take advantage</a>
+          `;
+          container.appendChild(card);
+        }
+      });
+
+
+
+
+    }
+  
+    function filterDiscounts() {
+      renderDiscounts();
+    }
+  
+    populateDiscounts();
+
+
+    function updateSliderValue() {
+    let slider = document.getElementById('discount-slider');
+    let sliderValue = document.getElementById('slider-value');
+    sliderValue.innerText = slider.value + '%';
+    filterDiscounts(); // Call filterDiscounts to update the display based on the new threshold
+  }
+
+  // Call updateSliderValue on page load to set initial value
+  updateSliderValue();
+  </script>
+
+</body>
+</html>
